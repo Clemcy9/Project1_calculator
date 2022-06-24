@@ -1,0 +1,177 @@
+<html>
+
+<head>
+  <title>Calculator</title>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background-color: black;
+      font-family: sans-serif;
+      outline: none;
+    }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .calculator {
+      background-color: skyblue;
+      padding: 15px;
+      border-radius: 30px;
+      box-shadow: inset 5px 5px 12px #ffffff, 5px 5px 12px rgba(0, 0, 0, .16);
+
+    }
+
+    .calculator-keys {
+      background-color: skyblue;
+    }
+
+    input {
+      /* grid-colomn:span 4; */
+      height: 70px;
+      width: 260px;
+      background-color: #ecf0f3;
+      box-shadow: inset -5px -5px 12px #ffffff, inset 5px 5px 12px rgba(0, 0, 0, .16);
+      border: none;
+      border-radius: 30px;
+      color: rgb(73, 70, 70);
+      font-size: 50px;
+      text-align: right;
+      top: 7px;
+      padding-right: 5px;
+    }
+
+    button {
+      height: 50px;
+      width: 50px;
+      background-color: #ecf0f3;
+      box-shadow: inset -5px -5px 12px #ffffff, 5px 5px 12px rgba(0, 0, 0, .16);
+      border: none;
+      border-radius: 50%;
+      margin: 5px;
+      font-size: 16px;
+    }
+
+    #equal {
+      width: 115px;
+      border-radius: 40px;
+      background-color: #ecf0f3;
+      box-shadow: inset -5px -5px 12px #ffffff, 5px 5px 12px rgba(0, 0, 0, .16);
+    }
+
+    button:hover {
+      background: lightgrey;
+      opacity: 0.9;
+    }
+
+    .key-active {
+      background: red;
+      color: white;
+      box-shadow: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="calculator">
+      <form action="/" method="post">
+
+
+        <input type="text" name='screen' placeholder="{{result}}" id="output-screen"><br>
+
+        <div class="calculator-keys">
+          <button type="button" data-action="clear">Cl</button>
+          <button type="button" data-action="delete">Del</button>
+          <button type="button" name="percent" data-action="percent">^</button>
+          <button type="button" name="divide" data-action="divide">/</button><br>
+          <button type="button">7</button>
+          <button type="button">8</button>
+          <button type="button">9</button>
+          <button type="button" name="multiply" data-action="multiply">*</button><br>
+          <button type="button">4</button>
+          <button type="button">5</button>
+          <button type="button">6</button>
+          <button type="button" name="sub" data-action="subtract">-</button><br>
+          <button type="button">1</button>
+          <button type="button">2</button>
+          <button type="button">3</button>
+          <button data-action="add" type="button" name="add">+</button><br>
+          <button data-action="decimal" id="decimal-btn" type="button">.</button>
+          <button type="button">0</button>
+          <button id="equal" data-action="calculate" type="submit">=</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <script>
+
+    const calculator = document.querySelector('.calculator');
+    const keys = document.querySelector('.calculator-keys');
+    const display = document.querySelector('#output-screen');
+
+    //empty variables for calculate function
+    // let num1 ;
+    // let num2 ;
+    // let operator ;
+
+
+
+    keys.addEventListener('click', e => {
+      if (e.target.matches('button')) {
+        const key = e.target;
+        const action = key.dataset.action;
+        const keyContent = key.textContent;
+        const displayedNum = display.value;
+
+        //remove key-active class from all keys
+        Array.from(key.parentNode.children).forEach(k => k.classList.remove('key-active'));
+
+        if (!action) {
+          if (displayedNum === "0") {
+            display.value = keyContent;
+          } else {
+            display.value = displayedNum + keyContent;
+          }
+        }
+
+        if (action === 'add' || action === 'subtract' || action === 'multiply' || action === 'divide' || action === 'percent') {
+          key.classList.add('key-active')
+          display.value = displayedNum + keyContent;
+          operator = keyContent;
+        }
+
+        if (action === 'decimal') {
+          display.value = displayedNum + '.'
+          document.getElementById("decimal-btn").disabled = true;
+        }
+
+        if (action === 'clear') {
+          display.value = "";
+          document.getElementById("decimal-btn").disabled = false;
+        }
+
+        if (action === 'delete') {
+          let sliced = display.value.slice(0, -1)
+          display.value = sliced;
+        }
+
+        //if (action === 'calculate') {
+        //ans = eval(displayedNum);
+        //display.value = ans;
+        //}
+
+      }
+    })
+
+  </script>
+</body>
+
+</html>
